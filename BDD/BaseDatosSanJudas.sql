@@ -2,9 +2,9 @@
 -- Ejecutar manualmente en SQL Server. No elimina datos ni tablas existentes.
 -- Las relaciones se validan en el backend mediante DGDbContext y servicios.
 IF DB_ID(N'DBSistemaEmpleados') IS NULL
-    EXEC(N'CREATE DATABASE DBSistemaEmpleados');
+    EXEC(N'CREATE DATABASE SanJudas');
 GO
-USE DBSistemaEmpleados;
+USE SanJudas;
 GO
 
 IF OBJECT_ID(N'Alumnos', N'U') IS NULL
