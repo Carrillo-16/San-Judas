@@ -1,0 +1,35 @@
+# Dependencias y compilaciones
+node_modules/
+bin/
+obj/
+dist/
+dist-ssr/
+.vs/
+.idea/
+*.user
+*.suo
+*.log
+TestResults/
+
+# Archivos cargados por la directora y datos locales
+Archivos/
+ArchivosPrivados/
+App_Data/
+*.bak
+*.mdf
+*.ldf
+
+# Configuracion privada
+.env
+.env.*
+!.env.example
+appsettings.Local.json
+*.pfx
+*.p12
+*.pem
+*.key
+
+# Temporales
+~$*
+.DS_Store
+Thumbs.db

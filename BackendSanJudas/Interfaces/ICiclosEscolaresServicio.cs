@@ -1,0 +1,3 @@
+using BackendSanJudas.Modelos.CiclosEscolares;
+namespace BackendSanJudas.Interfaces;
+public interface ICiclosEscolaresServicio : ICrudServicio<CrearCiclosEscolaresDto,ActualizarCiclosEscolaresDto,ConsultarCiclosEscolaresDto> { }

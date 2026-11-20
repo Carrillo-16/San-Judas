@@ -1,0 +1,10 @@
+@Servidor = http://localhost:5283
+
+### Consultar alumnos reales
+GET {{Servidor}}/Api/Alumnos?Pagina=1&TamanoPagina=20
+
+### Descargar plantilla vacía
+GET {{Servidor}}/Api/Plantillas/Alumno/Pdf
+
+### Descargar una inscripción registrada (reemplazar identificador)
+GET {{Servidor}}/Api/Inscripciones/1/Pdf

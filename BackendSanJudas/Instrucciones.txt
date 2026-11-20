@@ -1,0 +1,83 @@
+SAN JUDAS - CONFIGURACIÓN LOCAL
+
+BACKEND
+Abrir BackendSanJudas.sln o ejecutar desde la carpeta del backend:
+    dotnet restore
+    dotnet run --launch-profile http
+API: http://localhost:5283/Api
+Swagger: http://localhost:5283/swagger
+En esta etapa no hay login, cookies, contraseñas ni tokens.
+JWT y BCrypt quedan pendientes para la siguiente etapa. Uso local mientras tanto.
+
+SQL SERVER
+ConnectionStrings:DefaultConnection apunta a:
+    ING-CARRILLO\SQLEXPRESS / DBSistemaEmpleados
+Ejecutar manualmente BaseDatosSanJudas.sql de la raíz del backend.
+También hay una copia idéntica en ..\BDD\BaseDatosSanJudas.sql.
+El script usa CREATE TABLE con PK IDENTITY(1,1), columnas y código de alumno único.
+No crea FOREIGN KEY ni CHECK. Las relaciones se describen en entidades y contexto,
+y se validan desde los servicios. No usar ediciones directas para omitir esas reglas.
+Si ya existía una tabla, el script no la elimina ni cambia sus restricciones previas.
+Se incorpora Genero si falta en Alumnos; el resto presupone la estructura actual.
+Los INSERT son solo catálogos de grados, áreas, asignaciones y categorías.
+No se insertan alumnos, padres, notas ni documentos de ejemplo.
+El backend no ejecuta migraciones ni crea la base automáticamente.
+Desde este entorno la instancia indicada respondió error 26 (servidor no localizado).
+Para la comprobación de inscripción real debe estar disponible esa instancia y base.
+
+FRONTEND
+Desde FrontendSanJudas:
+    npm install
+    npm run dev
+Abrir http://localhost:5173
+Vite redirige /Api al backend http://localhost:5283.
+Para compilar: npm run build.
+Para otro servidor, configurar VITE_API_URL antes de compilar y Frontend:Origenes
+en appsettings.json. Se organizó en Modelos, Servicios, Componentes y Paginas.
+Las pantallas son clases React en archivos .tsx separados. main.tsx solo inicia App.
+
+FLUJO
+1. Crear ciclo escolar y grupos con grado, sección A/B y cupo.
+2. Registrar alumno con nombres, apellidos, código, nacimiento y género opcional.
+3. Registrar padres/tutores en Padres y responsables.
+4. En Alumnos > Expediente, vincular cada persona como madre, padre o tutor.
+5. Subir foto JPG/PNG o documentos opcionales desde ese expediente.
+6. Crear inscripción seleccionando alumno, grupo, encargado y fecha.
+   Si el encargado es padre o madre, usar un teléfono alternativo al principal.
+7. En Inscripciones, pulsar Descargar ficha PDF.
+8. Registrar notas por grupo, área y bimestre en Calificaciones.
+   El consolidado aparece al final; la boleta de calificaciones sigue pendiente
+   de su plantilla específica. La plantilla actual es la ficha de inscripción.
+9. Guardar actas/cartas en Actas y documentos; filtrar fecha, categoría y plantilla.
+
+PLANTILLA DE INSCRIPCIÓN
+Fuente: Plantillas\Plantilla_Alumno.xlsx. No se modifica el archivo original.
+GET /Api/Inscripciones/{id}/Pdf genera la ficha con los datos registrados y foto.
+GET /Api/Plantillas/Alumno/Pdf descarga el formato vacío real, sin datos simulados.
+La plantilla se lee por celdas y se dibuja directamente en PDF, manteniendo los
+textos, combinaciones, fuentes, logo y casillas de este diseño. No requiere Excel
+instalado. No es un conversor general de cualquier libro Excel o gráfico.
+El mapa se encuentra en Servicios/InscripcionPdfServicio.cs:
+C5 fecha inscripción; C6 ciclo; C10 nombre; B11 código; C12 nacimiento;
+B13 grado; D13 sección; B14 género; D14 edad;
+C20/F20 madre y DPI; C21/F21 nacimiento y edad; B22 teléfono;
+C25/F25 padre y DPI; C26/F26 nacimiento y edad; B27 teléfono;
+C30/F30 encargado y DPI; B31 teléfono. Foto: F10:G15.
+Las edades se calculan a la fecha de inscripción.
+Si se cambian las posiciones de campos, actualizar este mapa.
+Nombre del establecimiento y firma se leen del Excel.
+La generación PDF utiliza fuentes de Windows; para Linux se requiere configurar
+un resolvedor de fuentes equivalente antes de desplegar.
+
+ARCHIVOS
+Carpeta configurada: C:\Proyectos\SanJudas\Archivos
+SQL guarda rutas y metadatos; el archivo se descarga solo cuando se solicita.
+Máximo 10 MB. DPI y otros adjuntos: PDF, DOC, DOCX, XLS, XLSX, JPG y PNG.
+La foto debe ser JPG o PNG. Para sustituirla, eliminar la anterior y cargar la nueva.
+Respaldar tanto SQL Server como la carpeta Archivos.
+
+VALIDACIÓN DE ESTE AVANCE
+Compilación backend y frontend; revisión visual del PDF de la plantilla y formulario.
+No se creó carpeta de pruebas ni datos simulados.
+No se ejecutó el script contra SQL Server ni se modificaron registros de alumnos.
+La lectura/escritura real y PDF completo requieren restablecer la conexión SQL.

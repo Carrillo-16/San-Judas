@@ -1,0 +1,3 @@
+using BackendSanJudas.Modelos.CategoriasDocumentos;
+namespace BackendSanJudas.Interfaces;
+public interface ICategoriasDocumentosServicio : ICrudServicio<CrearCategoriasDocumentosDto,ActualizarCategoriasDocumentosDto,ConsultarCategoriasDocumentosDto> { }

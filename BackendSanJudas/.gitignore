@@ -1,0 +1,10 @@
+bin/
+obj/
+.vs/
+App_Data/
+ArchivosPrivados/
+Pruebas/bin/
+Pruebas/obj/
+*.user
+appsettings.Local.json
+TestResults/
